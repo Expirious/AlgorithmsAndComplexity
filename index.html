@@ -1,47 +1,45 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
-<head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta charset="utf-8">
-    <title>Test</title>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta charset="utf-8">
+        <title>Project</title>
 
-    <link rel="stylesheet" href="style.css">
-    <script type="text/javascript" src="index.js"></script>
+        <link rel="stylesheet" href="style.css">
+        <script type="text/javascript" src="index.js"></script>
 
-</head>
-<body>
+    </head>
+    <body>
+        <div class="maindiv">
+            <button onclick="generateNumbers()" class="buttons" type="button" name="button">Generate Numbers</button>
 
-    <div>
-        <button onclick="generateNumbers()" class="buttons" type="button" name="button">Generate Numbers</button>
+            <div>
+                <textarea id="output" cols="80" rows="30" disabled></textarea>
+            </div>
 
-        <div>
-            <textarea id="output" cols="80" rows="30" disabled></textarea>
+            <br>
+
+            <select id="sortBy">
+                <option value="ascending">Ascending</option>
+                <option value="descending">Descending</option>
+            </select>
+
+            <br>
+
+            <select id="sortingAlgorithm">
+                <option value="bubbleSort">Bubble Sort</option>
+                <option value="insertionSort">Insertion Sort</option>
+                <option value="selectionSort">Selection Sort</option>
+                <option value="quickSort">Quick Sort</option>
+            </select>
+
+            <br>
+
+            <button onclick="sort()">Sort</button>
+
+            <br>
+
+            <p id="steps"></p>
         </div>
-
-        <br>
-
-        <select id="sortBy">
-            <option value="ascending">Ascending</option>
-            <option value="descending">Descending</option>
-        </select>
-
-        <br>
-
-        <select id="sortingAlgorithm">
-            <option value="bubbleSort">Bubble Sort</option>
-            <option value="insertionSort">Insertion Sort</option>
-            <option value="selectionSort">Selection Sort</option>
-            <!-- <option value="quickSort">Quick Sort</option> -->
-        </select>
-
-        <br>
-
-        <button onclick="sort()">Sort</button>
-
-        <br>
-
-        <p id="steps"></p>
-    </div>
-</body>
-
+    </body>
 </html>

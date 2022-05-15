@@ -1,10 +1,11 @@
 let numbers = [];
+let steps = 0;
 
 function displayNumbers(){
     document.getElementById("output").textContent = numbers;
 }
 
-function displaySteps(steps){
+function displaySteps(){
     let paragraph = document.getElementById("steps");
     paragraph.textContent = "Steps: " + steps;
     paragraph.style.visibility = "visible";
@@ -22,150 +23,122 @@ function sortBy(){
 }
 
 function sort(){
+    steps = 0;
+
     switch (document.getElementById("sortingAlgorithm").value){
-        case "bubbleSort": displaySteps(bubbleSort());
+        case "bubbleSort": bubbleSort();
         break;
 
-        case "insertionSort": displaySteps(insertionSort());
+        case "insertionSort": insertionSort();
         break;
 
-        case "selectionSort": displaySteps(selectionSort());
+        case "selectionSort": selectionSort();
         break;
 
-        case "quickSort": displaySteps(quickSort());
+        case "quickSort": quickSort();
         break;
     }
 
+    displaySteps();
     displayNumbers();
+}
+
+function compare(number1, number2, standardComparison = sortBy()){
+    if (standardComparison){
+        return number1 > number2;
+    }
+    else{
+        return number1 < number2;
+    }
 }
 
 function bubbleSort(){
     let sorted = false;
-    let steps = 0;
 
-    if (sortBy()){
-        while (!sorted){
-            sorted = true;
+    while (!sorted){
+        sorted = true;
 
-            for (let i = 0; i < numbers.length - 1; i++)
-                if (numbers[i] > numbers[i + 1]){
-                    let number = numbers[i];
-                    numbers[i] = numbers[i + 1];
-                    numbers[i + 1] = number;
+        for (let i = 0; i < numbers.length - 1; i++)
+            if (compare(numbers[i], numbers[i + 1])){
+                let number = numbers[i];
+                numbers[i] = numbers[i + 1];
+                numbers[i + 1] = number;
 
-                    sorted = false;
-                    steps++;
-                }
-        }
+                sorted = false;
+                steps++;
+            }
     }
-    else{
-        while (!sorted){
-            sorted = true;
-
-            for (let i = 0; i < numbers.length - 1; i++)
-                if (numbers[i] < numbers[i + 1]){
-                    let number = numbers[i];
-                    numbers[i] = numbers[i + 1];
-                    numbers[i + 1] = number;
-
-                    sorted = false;
-                    steps++;
-                }
-        }
-    }
-
-    return steps;
 }
 
 function insertionSort(){
     let currentNumber, j;
-    let steps = 0;
 
-    if (sortBy())
+    for (let i = 1; i < numbers.length; i++)
     {
-        for (let i = 1; i < numbers.length; i++)
+        currentNumber = numbers[i];
+        j = i - 1;
+
+        while (j >= 0 && compare(numbers[j], currentNumber))
         {
-            currentNumber = numbers[i];
-            j = i - 1;
+            numbers[j + 1] = numbers[j];
+            j--;
 
-            while (j >= 0 && numbers[j] > currentNumber)
-            {
-                numbers[j + 1] = numbers[j];
-                j--;
-
-                steps++;
-            }
-
-            numbers[j + 1] = currentNumber;
+            steps++;
         }
+
+        steps++;
+        numbers[j + 1] = currentNumber;
     }
-    else
-    {
-        for (let i = 1; i < numbers.length; i++)
-        {
-            currentNumber = numbers[i];
-            j = i - 1;
-
-            while (j >= 0 && numbers[j] < currentNumber)
-            {
-                numbers[j + 1] = numbers[j];
-                j--;
-
-                steps++;
-            }
-
-            numbers[j + 1] = currentNumber;
-        }
-    }
-
-    return steps;
 }
 
 function selectionSort(){
-    let steps = 0;
+    let minValueIndex;
 
-    if (sortBy())
-    {
-        let minValueIndex;
+    for (let i = 0; i < numbers.length; i++){
+        minValueIndex = i;
 
-        for (let i = 0; i < numbers.length; i++){
-            minValueIndex = i;
+        for (let j = i + 1; j < numbers.length; j++) {
+            if (compare(numbers[j], numbers[minValueIndex], !sortBy()))
+                minValueIndex = j;
 
-            for (let j = i + 1; j < numbers.length; j++) {
-                if (numbers[j] < numbers[minValueIndex])
-                    minValueIndex = j;
-
-                steps++;
-            }
-
-            let temp = numbers[i];
-            numbers[i] = numbers[minValueIndex];
-            numbers[minValueIndex] = temp;
+            steps++;
         }
+
+        let temp = numbers[i];
+        numbers[i] = numbers[minValueIndex];
+        numbers[minValueIndex] = temp;
     }
-    else
-    {
-        let maxValueIndex;
-
-        for (let i = 0; i < numbers.length; i++){
-            maxValueIndex = i;
-
-            for (let j = i + 1; j < numbers.length; j++){
-                if (numbers[j] > numbers[maxValueIndex])
-                    maxValueIndex = j;
-
-                steps++
-            }
-
-            let temp = numbers[i];
-            numbers[i] = numbers[maxValueIndex];
-            numbers[maxValueIndex] = temp;
-        }
-    }
-
-    return steps;
 }
 
-function quickSort(){
+function partition(low, high){
+    let pivot = numbers[high];
 
+    let i = low - 1;
+    for (let j = low; j < high; j++) {
+        if (compare(numbers[j], pivot, !sortBy())) {
+            i++;
+            let temp = numbers[i];
+            numbers[i] = numbers[j];
+            numbers[j] = temp;
+
+            steps++;
+        }
+    }
+    let temp = numbers[i + 1];
+    numbers[i + 1] = numbers[high];
+    numbers[high] = temp;
+
+    steps++;
+
+    return i + 1;
+}
+
+function quickSort(low = 0, high = numbers.length - 1){
+
+    if (low < high){
+        let pivot = partition(low, high);
+
+        quickSort(low, pivot - 1);
+        quickSort(pivot + 1, high);
+    }
 }
